@@ -31,6 +31,11 @@ public class IndexController {
 	public String login() {
 		return "login";
 	}
+	@GetMapping("/loginProc")
+	@ResponseBody
+	public String loginProc() {
+		return "loginProc";
+	}
 	
 	@GetMapping("/join")
 	public String join() {
