@@ -5,19 +5,17 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity // 스프링시큐리티 필터가 스프링 필터체인에 등록. 최신 Security버전에서는 사용 안하는듯
+@EnableWebSecurity // 스프링시큐리티 필터가 스프링 필터체인에 등록
+//@EnableGlobalMethodSecurity(securedEnabled = true) //deprecated
+@EnableMethodSecurity
 public class SecurityConfig {
 
 //	@Autowired
@@ -36,7 +34,7 @@ public class SecurityConfig {
  			.authorizeHttpRequests((authorizeHttpRequests) ->
  				authorizeHttpRequests
  					.requestMatchers("/user/**").authenticated()
- 					.requestMatchers("/admin/**").hasRole("ADMIN")
+ 					.requestMatchers("/admin/**").hasAnyRole("ADMIN")
  					.requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
  					.anyRequest().permitAll()
  			)
