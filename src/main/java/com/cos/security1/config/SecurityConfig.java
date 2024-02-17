@@ -32,6 +32,7 @@ public class SecurityConfig {
 	@Bean
  	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
  		http
+ 			.csrf((csrf)->csrf.disable())
  			.authorizeHttpRequests((authorizeHttpRequests) ->
  				authorizeHttpRequests
  					.requestMatchers("/user/**").authenticated()
@@ -50,6 +51,7 @@ public class SecurityConfig {
  		return http.build();
  	}
 
+//	withDefaults용 계정
  	@Bean
  	public UserDetailsService userDetailsService() {
  		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
