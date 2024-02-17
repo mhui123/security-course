@@ -1,16 +1,15 @@
 package com.cos.security1.config;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.cos.security1.config.oauth.PrincipalOauth2UserService;
 
 @Configuration
 @EnableWebSecurity // 스프링시큐리티 필터가 스프링 필터체인에 등록
@@ -18,8 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-//	@Autowired
-//	private PrincipalOauth2UserService principalOauth2UserService;
+	@Autowired
+	private PrincipalOauth2UserService principalOauth2UserService;
 
 	@Bean
 	public BCryptPasswordEncoder encodePwd() {
@@ -46,23 +45,35 @@ public class SecurityConfig {
 //					.failureUrl("/authentication/login?failed")
 					.loginProcessingUrl("/loginProc") // login주소가 호출되면 시큐리티가 낚아채서 대신 로그인 진행
 					.defaultSuccessUrl("/")
-			);
+ 					)
+ 			.oauth2Login((oAuthLogin) ->
+ 					oAuthLogin.loginPage("/loginForm")
+ 					.userInfoEndpoint().userService(principalOauth2UserService)
+ 					)
+ 			;
  		return http.build();
  	}
-// auth에서 따로 관리하므로 아래의 Bean은 불필요하다.
-// 	@Bean
-// 	public UserDetailsService userDetailsService() {
-// 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-// 		String pw = encoder.encode("password");
-// 		UserDetails user = User.withUsername("user")
-// 			     .password("1234")
-// 			     .roles("USER")
-// 			     .build();
-// 		UserDetails admin = User.withUsername("admin")
-//			     .password("password")
-//			     .roles("ADMIN", "USER")
-//			     .build();
-// 		
-// 		return new InMemoryUserDetailsManager(user, admin);
-// 	}
+	
+//	
+//	 	@Bean
+//	 	public ClientRegistrationRepository clientRegistrationRepository() {
+//	 		return new InMemoryClientRegistrationRepository(this.googleClientRegistration());
+//	 	}
+//	 
+//	  	private ClientRegistration googleClientRegistration() {
+//	  		return ClientRegistration.withRegistrationId("google")
+//	  			.clientId("google-client-id")
+//	  			.clientSecret("google-client-secret")
+//	  			.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//	  			.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//	  			.redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
+//	  			.scope("openid", "profile", "email", "address", "phone")
+//	  			.authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
+//	  			.tokenUri("https://www.googleapis.com/oauth2/v4/token")
+//	  			.userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
+//	  			.userNameAttributeName(IdTokenClaimNames.SUB)
+//	  			.jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
+//	 			.clientName("Google")
+//	  			.build();
+//	 	}
 }

@@ -18,6 +18,7 @@ public class PrincipalDetailsService implements UserDetailsService{
 	
 	//해당 이름의 유저가 존재하는지 확인하는 메서드
 	// 시큐리티 session => Autentication => UserDetails
+	// 함수종료시 @AuthenticationPrincipal 어노테이션 생성
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		System.out.println("123123  "+username);
