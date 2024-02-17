@@ -1,5 +1,7 @@
 package com.cos.security1.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -41,17 +43,12 @@ public class IndexController {
 		return "admin";
 	}
 	
-//	스프링 시큐리티가 낚아챔 withDefault세팅시
 	@GetMapping("/login")
 	public String login() {
-		System.out.println("asdfasdfasdf");
+		System.out.println("/login 실행시간 " + LocalDateTime.now());
 		return "loginForm";
 	}
-	@PostMapping("/loginProc")
-	@ResponseBody
-	public String loginProc() {
-		return "loginProc";
-	}
+	
 	
 	@PostMapping("/join")
 	public String join(User user) {

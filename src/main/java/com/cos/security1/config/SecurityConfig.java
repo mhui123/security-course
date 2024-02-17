@@ -42,29 +42,29 @@ public class SecurityConfig {
  			)
  			.formLogin((formLogin) ->
 				formLogin
-//					.usernameParameter("username")
+//					.usernameParameter("username") // 파라미터로 보낼 이름값 설정하는 부분. username이라고 안쓰고 다른이름 쓰고 싶은 경우 for loadUserByUsername
 //					.passwordParameter("password")
 					.loginPage("/login")
 //					.failureUrl("/authentication/login?failed")
-					.loginProcessingUrl("/loginProc")
+					.loginProcessingUrl("/loginProc") // login주소가 호출되면 시큐리티가 낚아채서 대신 로그인 진행
+					.defaultSuccessUrl("/")
 			);
  		return http.build();
  	}
-
-//	withDefaults용 계정
- 	@Bean
- 	public UserDetailsService userDetailsService() {
- 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
- 		String pw = encoder.encode("password");
- 		UserDetails user = User.withUsername("user")
- 			     .password("1234")
- 			     .roles("USER")
- 			     .build();
- 		UserDetails admin = User.withUsername("admin")
-			     .password("password")
-			     .roles("ADMIN", "USER")
-			     .build();
- 		
- 		return new InMemoryUserDetailsManager(user, admin);
- 	}
+// auth에서 따로 관리하므로 아래의 Bean은 불필요하다.
+// 	@Bean
+// 	public UserDetailsService userDetailsService() {
+// 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+// 		String pw = encoder.encode("password");
+// 		UserDetails user = User.withUsername("user")
+// 			     .password("1234")
+// 			     .roles("USER")
+// 			     .build();
+// 		UserDetails admin = User.withUsername("admin")
+//			     .password("password")
+//			     .roles("ADMIN", "USER")
+//			     .build();
+// 		
+// 		return new InMemoryUserDetailsManager(user, admin);
+// 	}
 }

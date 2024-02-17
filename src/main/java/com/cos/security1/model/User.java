@@ -1,6 +1,10 @@
 package com.cos.security1.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +21,7 @@ public class User {
 	private String password;
 	private String email;
 	private String role;
-	private LocalDateTime createDate;
+	@CreationTimestamp
+	private Timestamp createDate;
 
 }
